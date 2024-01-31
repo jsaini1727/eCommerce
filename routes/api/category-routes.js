@@ -65,12 +65,29 @@ try{
 
 });
 
+// update a category by its `id` value
 router.put('/:id', (req, res) => {
-  // update a category by its `id` value
 });
 
-router.delete('/:id', (req, res) => {
-  // delete a category by its `id` value
+
+
+// delete a category by its `id` value
+router.delete('/category/:id', async (req, res) => {
+const category_id = reqObj.params.id
+try {
+  await Category.destroy({
+    where: {
+      id: category_id
+    }
+  })
+resObj.send({
+  message: 'Category deleted successfully'
+})
+
+}catch (err){
+  console.log(err)
+}
+
 });
 
 module.exports = router;
