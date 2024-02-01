@@ -3,7 +3,7 @@ const seedProducts = require('./product-seeds');
 const seedTags = require('./tag-seeds');
 const seedProductTags = require('./product-tag-seeds');
 
-const sequelize = require('../Develop/config/connection');
+const sequelize = require('../db/connection');
 
 const seedAll = async () => {
   await sequelize.sync({ force: true });

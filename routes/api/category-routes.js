@@ -5,13 +5,12 @@ const { Category, Product } = require('../../models');
 
 // find all categories
 // be sure to include its associated Products
-router.get('/categories/products', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
-
     const categories = await Category.findAll({
-      include: Product
+      include: [Product]
     });
-    responseObj.json(categories);
+    res.json(categories);
   } catch (err) {
     console.log(err)
   };
@@ -21,19 +20,19 @@ router.get('/categories/products', async (req, res) => {
 
 // find one category by its `id` value
 // be sure to include its associated Products
-router.get('/category/:id', async (req, res) => {
-  const category_id = requestObj.query.category_id;
+router.get('/:id', async (req, res) => {
   try {
+    const category_id = req.params.id;
     const category = await Category.findOne({
       where: {
         id: category_id
       },
-      include: Product
+      include: [Product]
     });
     if (category){
-      responseObj.json(category);
+      return res.json(category);
     }
-    responseObj.json({
+    res.json({
       error: 404,
       message: 'Category not found by that ID'
     })
@@ -46,18 +45,18 @@ router.get('/category/:id', async (req, res) => {
 
 // create a new category
 router.post('/category', async(req, res) => {
-  const categoryData = reqObj.body;
-try{
+  try{
+  const categoryData = req.body;
   const category = await Category.create(categoryData);
 
-  resObj.json({
+  res.json({
     message: 'Category added successfully',
     category: category
   });
 } catch (err){
   const messages = err.errors.map(eObj => eObj.message);
 
-  resObj.json({
+  res.json({
     error: 401,
     message: messages
   });
@@ -66,21 +65,31 @@ try{
 });
 
 // update a category by its `id` value
-router.put('/:id', (req, res) => {
+router.put('/:id', async (req, res) => {
+  try {
+    const category = await Category.update(req.body, {
+      where: {
+        id: req.params.id
+      }
+    })
+    res.json(category)
+  } catch (error) {
+    res.status(500).json(error.message)
+  }
 });
 
 
 
 // delete a category by its `id` value
 router.delete('/category/:id', async (req, res) => {
-const category_id = reqObj.params.id
-try {
+  try {
+  const category_id = req.params.id
   await Category.destroy({
     where: {
       id: category_id
     }
   })
-resObj.send({
+res.send({
   message: 'Category deleted successfully'
 })
 
