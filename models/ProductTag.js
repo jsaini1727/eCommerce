@@ -16,13 +16,13 @@ ProductTag.init(
     },
     product_id: {
       type: DataTypes.INTEGER,
-      primaryKey: false,
       allowNull: false,
+      references: { model: 'product', key: 'id' }
     },
     tag_id: {
       type: DataTypes.INTEGER,
-      primaryKey: false,
       allowNull: false,
+      references: { model: 'tag', key: 'id' }
     }
   },
   {
@@ -33,6 +33,5 @@ ProductTag.init(
     modelName: 'product_tag',
   },
 );
-ProductTag.belongsTo(Product);
-ProductTag.belongsTo(Tag);
+
 module.exports = ProductTag;
